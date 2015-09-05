@@ -3,31 +3,31 @@
 
 public class GameController : MonoBehaviour
 {
+    public static GameController gameController;
+
     public enum GameState {GamePlay, MainMenu, PauseMenu}
     private GameState _gameState;
 
-    public delegate void StateChanger();
-    //Event's
-    public event StateChanger StartGameEvent;
-    public event StateChanger MainMenuEvent;
-    public event StateChanger PauseEvent;
+    public GameObject[] level1Enemies;
+    public Transform enemiesSpawn;
 
     public void StateGamePlay()
     {
-        SetState(GameState.GamePlay);
         StartGame();
+
+        SetState(GameState.GamePlay);
     }
 
     public void StateMainMenu()
     {
-        SetState(GameState.MainMenu);
 
+        SetState(GameState.MainMenu);
     }
 
     public void StatePauseMenu()
     {
-        SetState(GameState.PauseMenu);
 
+        SetState(GameState.PauseMenu);
     }
 
     public void SetState(GameState value)
@@ -38,6 +38,10 @@ public class GameController : MonoBehaviour
                 //Логика выхода из состояния
 
                 break;
+            case GameState.MainMenu:
+                break;
+            case GameState.PauseMenu:
+                break;
         }
 
         _gameState = value;
@@ -45,22 +49,33 @@ public class GameController : MonoBehaviour
 
     public void StartGame()
     {
-        
+        CreateEnemy();
     }
 
     public void Start()
     {
-        StartGameEvent += StateGamePlay;
-        MainMenuEvent += StateMainMenu;
-        PauseEvent += StatePauseMenu;
+        StateGamePlay();
     }
 
-    public class Enemy
+    void Update()
     {
-        public float MaxHp;
-        public float Hp;
-        public GameObject ModelPrefab;
+        switch (_gameState)
+        {
+            case GameState.GamePlay:
+                break;
+            case GameState.MainMenu:
+                break;
+            case GameState.PauseMenu:
+                break;
 
+        }
+    }
 
+    public void CreateEnemy()
+    {
+        GameObject enemy = (GameObject)Instantiate(GameController.gameController.level1Enemies[Random.Range(0, GameController.gameController.level1Enemies.Length)], Vector3.zero, Quaternion.identity);
+        enemy.transform.SetParent(GameController.gameController.enemiesSpawn);
+
+        Enemy.current.InitializeEnemy();
     }
 }
